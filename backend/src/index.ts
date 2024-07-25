@@ -24,7 +24,9 @@ const io = new Server(httpServer, {
 });
 
 app.use(express.json());
-
+app.use("/", (req, res) => {
+  res.status(200).send("server is running");
+});
 app.use("/api", taskRoutes);
 
 io.on("connection", (socket) => {
