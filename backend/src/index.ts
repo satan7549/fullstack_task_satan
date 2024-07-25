@@ -6,10 +6,16 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import taskRoutes from "./routes/taskRoutes";
 import { addTask } from "./controllers/taskController";
+import cors from "cors";
+import { flushTasksFromRedis } from "./services/redisService";
 
 const app = express();
 
+app.use(cors());
+
 const httpServer = createServer(app);
+
+// const io = new Server(httpServer);
 
 const io = new Server(httpServer, {
   cors: {
@@ -25,10 +31,8 @@ io.on("connection", (socket) => {
   console.log("a user connected");
 
   socket.on("add", async (task: string) => {
-    console.log(task, "task");
-    // await flushTasksFromRedis();
     await addTask(task);
-
+    // await flushTasksFromRedis();
     socket.broadcast.emit("taskAdded", task);
   });
 
