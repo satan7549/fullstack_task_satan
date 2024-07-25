@@ -24,6 +24,7 @@ const io = new Server(httpServer, {
 });
 
 app.use(express.json());
+
 app.use("/health", (req, res) => {
   res.status(200).json("server is running");
 });
