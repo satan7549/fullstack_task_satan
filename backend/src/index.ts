@@ -17,7 +17,7 @@ const httpServer = createServer(app);
 
 // const io = new Server(httpServer);
 
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: "*",
   },
@@ -36,8 +36,7 @@ io.on("connection", (socket) => {
 
   socket.on("add", async (task: string) => {
     await addTask(task);
-    // await flushTasksFromRedis();
-    socket.broadcast.emit("taskAdded", task);
+    socket.emit("taskAdded", task);
   });
 
   socket.on("disconnect", () => {
